@@ -1,8 +1,6 @@
 ---
-# defaults file for postfix
-postfix_test_from: noreply@example.com
-
-# Test message FROM address
+# Whether we should exist at all
+postfix_install: true
 
 
 # Lookup maps

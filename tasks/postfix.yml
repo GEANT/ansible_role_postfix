@@ -1,0 +1,59 @@
+---
+#
+# CONFIG
+- set_fact:
+    postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True) }}"
+    postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True) }}"
+    postfix_maps: "{{ postfix_maps_default|combine(postfix_maps, recursive=True) }}"
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: [always]
+
+- name: Ensure packages are available
+  package:
+    name: "{{ postfix_pkgs }}"
+
+
+- name: Ensure Postfix debconf installation type is set
+  debconf:
+    name: postfix
+    question: "postfix/main_mailer_type"
+    value: "No configuration"
+    vtype: "string"
+
+
+
+
+- name: Ensure Postfix main.cf is available
+  template:
+    src: main.cf.j2
+    dest: "{{ postfix_config_directory }}/main.cf"
+  notify: restart postfix
+  
+  
+    
+- name: Ensure Postfix master.cf is available
+  template:
+    src: master.cf.j2
+    dest: "{{ postfix_config_directory }}/master.cf"
+  notify: restart postfix
+
+
+  # Note: if the name does NOT start with a '/', then it is considered a relative
+  # path and the postfix_config_directory is used.
+- name: Ensure hash files are available
+  template:
+    src: "templates/hash_map.j2"
+    dest: "{% if item.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ item }}"
+  with_items: "{{ postfix_maps.hash | default({}) }}"
+  register: hashes
+  when: postfix_maps.hash is defined
+
+- name: Ensure new Berkely DB files are created for each hash
+  command: 'postalias hash:"{{ item.item }}"'
+  with_items: "{{ hashes.results }}"
+  notify: restart postfix
+  when:
+    - postfix_maps.hash is defined
+    - item.changed
