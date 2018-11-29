@@ -10,6 +10,9 @@
   include_vars: "{{ ansible_os_family }}.yml"
   tags: [always]
 
+- name: Ensure packages are available
+  package:
+    name: "{{ postfix_pkgs }}"
 
 
 - name: Ensure Postfix debconf installation type is set
@@ -19,9 +22,6 @@
     value: "No configuration"
     vtype: "string"
 
-- name: Ensure Postfix is available
-  package:
-    name: postfix
 
 
 
