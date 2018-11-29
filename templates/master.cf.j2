@@ -1,0 +1,6 @@
+# Postfix configuration file
+# DO NOT EDIT
+# {{ ansible_managed }}
+{% for param, value in postfix_master.iteritems() %}
+{{ param }}    {{ value }}
+{% endfor %}

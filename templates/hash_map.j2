@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+{% for param, value in postfix_maps['hash'][item].iteritems() %}
+{{ param }}: {{ value }}
+{% endfor %}

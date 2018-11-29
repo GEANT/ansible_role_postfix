@@ -1,0 +1,3 @@
+---
+# vars file for postfix
+postfix_config_directory: "/etc/postfix"
