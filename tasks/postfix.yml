@@ -2,9 +2,9 @@
 #
 # CONFIG
 - set_fact:
-    postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True) }}"
-    postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True) }}"
-    postfix_maps: "{{ postfix_maps_default|combine(postfix_maps, recursive=True) }}"
+    postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True)|dictsort }}"
+    postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True)|dictsort }}"
+    postfix_maps: "{{ postfix_maps_default|combine(postfix_maps, recursive=True)|dictsort }}"
 
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
