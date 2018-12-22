@@ -3,7 +3,11 @@
 # {{ ansible_managed }}
 {% for param, value in postfix_main  %}
 {% if value is iterable and value is not string %}
+{% if value.0.path is defined %}
+{{ param }} = {{ value.0.path }}
+{% else %}
 {{ param }} = {{ value | join (" ") }}
+{% endif %}
 {% else %}
 {{ param }} = {{ value }}
 {% endif %}
