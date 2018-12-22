@@ -3,4 +3,5 @@
 postfix_config_directory: "/etc/postfix"
 postfix_pkgs:
   - postfix
+  - postfix-pcre
   - bsd-mailx
