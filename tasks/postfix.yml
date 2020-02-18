@@ -46,14 +46,15 @@
   template:
     src: "templates/hash_map.j2"
     dest: "{% if item.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ item }}"
-  with_items: "{{ postfix_maps.hash | default({}) }}"
+    owner: root
+    group: root
+    mode: "{{ ('passw' in item) | ternary('0400', '0664') }}"
+  with_items: "{{ postfix_maps }}"
   register: hashes
-  when: postfix_maps.hash is defined
 
 - name: Ensure new Berkely DB files are created for each hash
-  command: 'postalias hash:"{{ item.item }}"'
+  command: 'postmap "{{ item.item }}"'
   with_items: "{{ hashes.results }}"
   notify: restart postfix
   when:
-    - postfix_maps.hash is defined
     - item.changed
