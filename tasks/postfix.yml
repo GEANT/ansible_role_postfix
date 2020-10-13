@@ -2,7 +2,7 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
   tags: [always]
- 
+
 - set_fact:
     postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True)|dictsort }}"
     postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True)|dictsort }}"
