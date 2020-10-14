@@ -2,7 +2,7 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
   tags: [always]
- 
+
 - set_fact:
     postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True)|dictsort }}"
     postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True)|dictsort }}"
@@ -53,8 +53,10 @@
   register: hashes
 
 - name: Ensure new Berkely DB files are created for each hash
-  command: 'postmap "{{ item.item }}"'
-  with_items: "{{ hashes.results }}"
+  command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.item }}
+  loop: "{{ hashes.results }}"
+  loop_control:
+    label: "{{ item.dest }}"
   notify: restart postfix
   when:
     - item.changed
