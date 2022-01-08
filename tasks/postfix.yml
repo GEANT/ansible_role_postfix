@@ -3,7 +3,8 @@
   include_vars: "{{ ansible_os_family }}.yml"
   tags: [always]
 
-- set_fact:
+- name: Set postfix variables
+  set_fact:
     postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True)|dictsort }}"
     postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True)|dictsort }}"
     postfix_maps: "{{ postfix_maps_default|combine(postfix_maps, recursive=True) }}"
@@ -24,12 +25,14 @@
   template:
     src: main.cf.j2
     dest: "{{ postfix_config_directory }}/main.cf"
+    mode: 0644
   notify: restart postfix
 
 - name: Ensure PCRE files are available
   copy:
     content: "{{ item.1.0.content }}"
     dest: "{{ item.1.0.path | regex_replace('^pcre:(.*)$', '\\1') }}"
+    mode: 0644
   with_list: "{{ postfix_main | default({}) }}"
   when: item.1.0 is defined and item.1.0.path is defined
 
@@ -37,6 +40,7 @@
   template:
     src: master.cf.j2
     dest: "{{ postfix_config_directory }}/master.cf"
+    mode: 0644
   notify: restart postfix
 
 
@@ -52,7 +56,7 @@
   with_items: "{{ postfix_maps }}"
   register: hashes
 
-- name: Ensure new Berkely DB files are created for each hash
+- name: Ensure new Berkely DB files are created for each hash  # noqa no-handler
   command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.item }}
   loop: "{{ hashes.results }}"
   loop_control:

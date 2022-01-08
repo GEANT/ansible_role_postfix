@@ -1,5 +1,5 @@
 ---
 include:
-  - project: 'geant/ci-auto-versioning'
-    ref: master
-    file: 'ci-auto-versioning.yml'
+  - project: "eduteams/ci-auto-versioning"
+    ref: ng
+    file: "profiles/role.yml"
