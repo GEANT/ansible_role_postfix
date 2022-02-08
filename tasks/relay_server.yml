@@ -1,0 +1,28 @@
+---
+- name: Ensure required packages are available
+  apt:
+    name:
+      - dovecot-core
+
+- name: Ensure SASL password file is available
+  copy:
+    dest: "{{ postfix_relay_password_file }}"
+    content: |
+      {% for account in postfix_relay_users %}
+      {{ account.username }}:{{ account.password | password_hash('argon2', postfix_relay_password_salt) }}
+      {% endfor %}
+    owner: root
+    group: dovecot
+    mode: 0640
+
+- name: Ensure Dovecot configuration files are available
+  template:
+    src: "dovecot/{{ item }}"
+    dest: "/etc/dovecot/conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - 10-auth.conf
+    - 10-master.conf
+  notify: restart dovecot

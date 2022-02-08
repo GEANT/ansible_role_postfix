@@ -64,3 +64,7 @@
   notify: restart postfix
   when:
     - item.changed
+
+- name: Include relay server tasks
+  include_tasks: relay_server.yml
+  when: postfix_relay_server_enable
