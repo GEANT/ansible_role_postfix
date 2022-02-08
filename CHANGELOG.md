@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.1.0] - 2022-02-08
+
+### Added
+
+- New feature flag `postfix_relay_server_enable`. When enabled it will deploy an SMTP relay server. Most of this was backported from the GÉANT internal ansible code that is used to deploy `relay.geant.org`.
+
 ## [v2.0.2] - 2022-01-08
 
 ### Changed
