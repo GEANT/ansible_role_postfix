@@ -2,6 +2,15 @@
 # Whether we should exist at all
 postfix_install: true
 
+# Relay server related
+postfix_relay_server_enable: false
+# postfix_relay_users:
+#   - username: foo
+#     password: hackme
+#     comments: Demo account for Foo
+postfix_relay_users: []
+postfix_relay_password_file: /etc/dovecot/password
+postfix_relay_password_salt: foobarhackmebaz
 
 # Lookup maps
 postfix_maps: {}
