@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.2.0] - 2022-02-15
+
+### Added
+
+- Extra `login` auth mechanism. This makes it possible for nagios to monitor if the credentials are working, since the `check_smtp` plugin [only supports LOGIN](https://doc.dovecot.org/configuration_manual/authentication/authentication_mechanisms/#plaintext-authentication) as auth mechanism.
+
 ## [v2.1.0] - 2022-02-08
 
 ### Added
