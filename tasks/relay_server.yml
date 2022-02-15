@@ -25,4 +25,6 @@
   loop:
     - 10-auth.conf
     - 10-master.conf
-  notify: restart dovecot
+  notify:
+    - restart dovecot
+    - restart postfix
