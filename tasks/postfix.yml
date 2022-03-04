@@ -6,7 +6,8 @@
 - name: Set postfix variables
   set_fact:
     postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True)|dictsort }}"
-    postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True)|dictsort }}"
+    postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True) |
+      dict2items | rejectattr('key', 'in', postfix_master_skip_keys) | items2dict | dictsort }}"
     postfix_maps: "{{ postfix_maps_default|combine(postfix_maps, recursive=True) }}"
   tags: [always]
 
