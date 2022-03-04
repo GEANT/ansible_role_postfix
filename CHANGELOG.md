@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## [v2.3.0] - 2022-03-04
+
+### Added
+
+- Feature to allow removing entries from the defaults of `master.cf`. This can be used to disable a postfix service, for instance the standard SMTP service on port 25.
+
+### Changed
+
+- The restart handler was changed to use the native postfix command.
+
+### Removed
+
+- Superfluous spacing in keys. 
+
 ## [v2.2.0] - 2022-02-15
 
 ### Added
