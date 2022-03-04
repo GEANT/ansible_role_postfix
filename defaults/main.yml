@@ -53,8 +53,8 @@ postfix_master_default:
   "cleanup unix":    "n       -       y       -       0       cleanup"  # noqa yaml
   "qmgr unix":       "n       -       n       300     1       qmgr"  # noqa yaml
   "tlsmgr unix":     "-       -       y       1000?   1       tlsmgr"  # noqa yaml
-  "rewrite unix ":   "-       -       y       -       -       trivial-rewrite"  # noqa yaml
-  "bounce unix ":    "-       -       y       -       0       bounce"  # noqa yaml
+  "rewrite unix":    "-       -       y       -       -       trivial-rewrite"  # noqa yaml
+  "bounce unix":     "-       -       y       -       0       bounce"  # noqa yaml
   "defer unix":      "-       -       y       -       0       bounce"  # noqa yaml
   "trace unix":      "-       -       y       -       0       bounce"  # noqa yaml
   "verify unix":     "-       -       y       -       1       verify"  # noqa yaml
@@ -78,3 +78,8 @@ postfix_master_default:
   "bsmtp unix":      "-       n       n       -       -       pipe flags=Fq. user=bsmtp argv=/usr/lib/bsmtp/bsmtp -t$nexthop -f$sender $recipient"  # noqa yaml
   "scalemail-backend unix": "- n      n       -       2       pipe flags=R user=scalemail argv=/usr/lib/scalemail/bin/scalemail-store ${nexthop} ${user} ${extension}"  # noqa yaml
   "mailman unix":    "-       n       n       -       -       pipe flags=FR user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py ${nexthop} ${user}"  # noqa yaml
+
+# This can be used to remove keys from master.cf
+postfix_master_skip_keys: []
+# postfix_master_skip_keys:
+#   - "smtp inet"
