@@ -15,6 +15,11 @@
   package:
     name: "{{ postfix_pkgs }}"
 
+- name: Ensure SASL packages are available when needed
+  package:
+    name: libsasl2-modules
+  when: "dict(postfix_main).smtp_sasl_auth_enable == 'yes'"
+
 - name: Ensure Postfix debconf installation type is set
   debconf:
     name: postfix
@@ -44,9 +49,8 @@
     mode: 0644
   notify: restart postfix
 
-
-  # Note: if the name does NOT start with a '/', then it is considered a relative
-  # path and the postfix_config_directory is used.
+  # Note: if the name does NOT start with a '/', then it is considered a path
+  # relative to "postfix_config_directory"
 - name: Ensure hash files are available
   template:
     src: "templates/hash_map.j2"
@@ -55,16 +59,16 @@
     group: root
     mode: "{{ ('passw' in item) | ternary('0400', '0664') }}"
   with_items: "{{ postfix_maps }}"
+  loop_control:
+    label: "{% if item.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ item }}"
   register: hashes
 
-- name: Ensure new Berkely DB files are created for each hash  # noqa no-handler
-  command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.item }}
-  loop: "{{ hashes.results }}"
+- name: Ensure corresponding Berkely DB files are created/updated  # noqa no-changed-when
+  command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.dest }}
+  loop: "{{ hashes.results|json_query('[?changed]') }}"
   loop_control:
-    label: "{{ item.dest }}"
+    label: "{{ item.dest }}.db"
   notify: restart postfix
-  when:
-    - item.changed
 
 - name: Include relay server tasks
   include_tasks: relay_server.yml
