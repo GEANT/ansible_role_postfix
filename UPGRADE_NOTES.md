@@ -1,5 +1,9 @@
 # UPGRADE_NOTES
 
+## [v2.4.0]
+
+- Nothing to do
+
 ## [v2.3.0]
 
 - Nothing to do

@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [v2.4.0] - 2022-05-04
+
+### Added
+
+- Task to install the SASL package when the configuration requires it.
+
+### Fixed
+
+- The list of Berkeley DB files to generate is now based on the list of source files that have actually changed.
+- Output of various tasks is now more correct
+
 ## [v2.3.0] - 2022-03-04
 
 ### Added
