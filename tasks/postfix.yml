@@ -18,7 +18,9 @@
 - name: Ensure SASL packages are available when needed
   package:
     name: libsasl2-modules
-  when: "dict(postfix_main).smtp_sasl_auth_enable == 'yes'"
+  when:
+    - "'smtp_sasl_auth_enable' in dict(postfix_main)"
+    - "dict(postfix_main).smtp_sasl_auth_enable == 'yes'"
 
 - name: Ensure Postfix debconf installation type is set
   debconf:
