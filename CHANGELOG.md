@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.4.1] - 2022-05-09
+
+### Fixed
+
+- More thorough check for `smtp_sasl_auth_enable` postfix setting
+
 ## [v2.4.0] - 2022-05-04
 
 ### Added
