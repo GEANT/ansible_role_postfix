@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## [v2.4.2] - 2022-08-04
+
+### Fixed
+
+- The `restart postfix` handler used the `postfix reload` command, which is sufficient for most configuration changes to take effect. It turns out there are two exceptions, if those parameters change then postfix needs to fully stop and start for them to be effective:
+  - [inet_interfaces](https://www.postfix.org/postconf.5.html#inet_interfaces)
+  - [inet_protocols](https://www.postfix.org/postconf.5.html#inet_protocols)
+
+  The handler now uses the service module to restart postfix, but because of the way [Debian handles multiple instances](https://salsa.debian.org/postfix-team/postfix-dev/-/blob/debian/bullseye/debian/README.Debian), the service name to use is `postfix@-`:
+
+  > In order to support multiple postfix instances, postfix uses multiple systemd unit files.  The overall postfix unit is for overall operations on all instances and individual unit files are available for each instance named
+  > postfix@${INSTANCE_NAME}.  The primary instance is named "-", so it can be directly addressed with systemctl using the name postfix@- (e.g. systemctl status postfix@-).  Wild cards work and so systemctl status postfix* will show the status of all active postfix units.
+
 ## [v2.4.1] - 2022-05-09
 
 ### Fixed
