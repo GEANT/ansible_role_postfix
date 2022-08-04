@@ -1,6 +1,9 @@
 ---
 - name: restart postfix
-  command: postfix reload
+  service:
+    # See https://salsa.debian.org/postfix-team/postfix-dev/-/blob/debian/bullseye/debian/README.Debian
+    name: postfix@-
+    state: restarted
 
 - name: restart dovecot
   service:
