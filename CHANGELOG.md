@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.4.3] - 2022-11-28
+
+### Added
+
+- `libsasl2-modules` to default packages
+
 ## [v2.4.2] - 2022-08-04
 
 ### Fixed
