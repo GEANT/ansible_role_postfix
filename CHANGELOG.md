@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.4.4] - 2022-11-28
+
+### Removed
+
+- Removed MR 23. There is already a dedicated task
+
 ## [v2.4.3] - 2022-11-28
 
 ### Added
