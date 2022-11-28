@@ -5,3 +5,4 @@ postfix_pkgs:
   - postfix
   - postfix-pcre
   - bsd-mailx
+  - libsasl2-modules
