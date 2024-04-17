@@ -1,60 +1,70 @@
 ---
 - name: Include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
   tags: [always]
 
+- name: Ensure packages are available
+  ansible.builtin.package:
+    name: "{{ postfix_pkgs }}"
+
+- name: Find postfix version
+  ansible.builtin.command:
+    cmd: postconf mail_version
+  register: postconf_mail_version
+  changed_when: false
+
+- name: Set postfix version
+  ansible.builtin.set_fact:
+    postfix_version: "{{ postconf_mail_version.stdout | regex_replace('.* ', '') }}"
+
 - name: Set postfix variables
-  set_fact:
+  ansible.builtin.set_fact:
     postfix_main: "{{ postfix_main_default|combine(postfix_main, recursive=True)|dictsort }}"
     postfix_master: "{{ postfix_master_default|combine(postfix_master, recursive=True) |
       dict2items | rejectattr('key', 'in', postfix_master_skip_keys) | items2dict | dictsort }}"
     postfix_maps: "{{ postfix_maps_default|combine(postfix_maps, recursive=True) }}"
   tags: [always]
 
-- name: Ensure packages are available
-  package:
-    name: "{{ postfix_pkgs }}"
-
 - name: Ensure SASL packages are available when needed
-  package:
+  ansible.builtin.package:
     name: libsasl2-modules
   when:
     - "'smtp_sasl_auth_enable' in dict(postfix_main)"
     - "dict(postfix_main).smtp_sasl_auth_enable == 'yes'"
 
 - name: Ensure Postfix debconf installation type is set
-  debconf:
+  ansible.builtin.debconf:
     name: postfix
     question: "postfix/main_mailer_type"
     value: "No configuration"
     vtype: "string"
 
 - name: Ensure Postfix main.cf is available
-  template:
+  ansible.builtin.template:
     src: main.cf.j2
     dest: "{{ postfix_config_directory }}/main.cf"
-    mode: 0644
+    mode: "0644"
   notify: restart postfix
 
 - name: Ensure PCRE files are available
-  copy:
+  ansible.builtin.copy:
     content: "{{ item.1.0.content }}"
     dest: "{{ item.1.0.path | regex_replace('^pcre:(.*)$', '\\1') }}"
-    mode: 0644
+    mode: "0644"
   with_list: "{{ postfix_main | default({}) }}"
   when: item.1.0 is defined and item.1.0.path is defined
 
 - name: Ensure Postfix master.cf is available
-  template:
+  ansible.builtin.template:
     src: master.cf.j2
     dest: "{{ postfix_config_directory }}/master.cf"
-    mode: 0644
+    mode: "0644"
   notify: restart postfix
 
   # Note: if the name does NOT start with a '/', then it is considered a path
   # relative to "postfix_config_directory"
 - name: Ensure hash files are available
-  template:
+  ansible.builtin.template:
     src: "templates/hash_map.j2"
     dest: "{% if item.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ item }}"
     owner: root
@@ -66,12 +76,12 @@
   register: hashes
 
 - name: Ensure corresponding Berkely DB files are created/updated  # noqa no-changed-when
-  command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.dest }}
+  ansible.builtin.command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.dest }}
   loop: "{{ hashes.results|json_query('[?changed]') }}"
   loop_control:
     label: "{{ item.dest }}.db"
   notify: restart postfix
 
 - name: Include relay server tasks
-  include_tasks: relay_server.yml
+  ansible.builtin.include_tasks: relay_server.yml
   when: postfix_relay_server_enable
