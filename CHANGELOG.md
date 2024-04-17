@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [v2.4.5] - 2024-04-17
+
+### Changed
+
+- Use FQCNs in tasks
+- Use current version as `compatibility_level`, instead of static `2`
+
 ## [v2.4.4] - 2022-11-28
 
 ### Removed
