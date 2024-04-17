@@ -1,4 +1,4 @@
 ---
 
-- include_tasks: postfix.yml
+- ansible.builtin.include_tasks: postfix.yml
   when: postfix_install
