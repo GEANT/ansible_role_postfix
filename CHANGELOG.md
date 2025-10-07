@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [v2.4.6] - 2025-10-07
+
+### Added
+
+- Support for Debian 13
+- Support for ansible 2.19
+
+### Fixed
+
+- Linting
+
+### Changed
+
+- `.gitignore` ignores more
+
 ## [v2.4.5] - 2024-04-17
 
 ### Changed
