@@ -1,11 +1,13 @@
 ---
-- name: restart postfix
-  service:
+- name: Restart postfix
+  ansible.builtin.service:
+    # Before trixe, the main service was called 'postfix@-', from trixie onwards it is 'postfix'.
     # See https://salsa.debian.org/postfix-team/postfix-dev/-/blob/debian/bullseye/debian/README.Debian
-    name: postfix@-
+    # See https://salsa.debian.org/postfix-team/postfix-dev/-/blob/debian/trixie/debian/README.Debian
+    name: "postfix{{ '@-' if postfix_version is version('3.9.1-7', '<') else '' }}"
     state: restarted
 
-- name: restart dovecot
-  service:
+- name: Restart dovecot
+  ansible.builtin.service:
     name: dovecot
     state: restarted

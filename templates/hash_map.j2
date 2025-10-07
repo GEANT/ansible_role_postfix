@@ -1,4 +1,0 @@
-# {{ ansible_managed }}
-{% for key in postfix_maps[item] %}
-{{ key }}{{ ('alias' in item) | ternary(':', '') }} {{ postfix_maps[item][key] }}
-{% endfor %}

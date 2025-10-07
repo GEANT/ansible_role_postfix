@@ -26,5 +26,5 @@
     - 10-auth.conf
     - 10-master.conf
   notify:
-    - restart dovecot
-    - restart postfix
+    - Restart dovecot
+    - Restart postfix

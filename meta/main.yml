@@ -5,12 +5,14 @@ galaxy_info:
   description: Postfix role
   company: GÉANT
   license: Apache-2.0
-  min_ansible_version: 2.5
+  min_ansible_version: "9"
   platforms:
     - name: Debian
       versions:
         - buster
         - bullseye
+        - bookworm
+        - trixie
 
   galaxy_tags: []
 dependencies: []
