@@ -1,5 +1,9 @@
 # UPGRADE_NOTES
 
+## [v2.4.7]
+
+- Redeploy the role
+
 ## [v2.4.6]
 
 - Nothing to do

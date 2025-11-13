@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.4.7] - 2025-11-13
+
+### Security
+
+- Fixed permissions test for password related maps file, this resulted in world readable password maps file if those were used
+
 ## [v2.4.6] - 2025-10-07
 
 ### Added
