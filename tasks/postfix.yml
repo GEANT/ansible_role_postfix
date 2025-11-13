@@ -73,7 +73,7 @@
     dest: "{% if map.key.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ map.key }}"
     owner: root
     group: root
-    mode: "{{ ('passw' in map.key.0) | ternary('0400', '0664') }}"
+    mode: "{{ '0400' if 'passw' in map.key else '0664' }}"
   loop: "{{ postfix_maps | dict2items }}"
   loop_control:
     loop_var: map
