@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.4.8] - 2025-11-19
+
+### Fixed
+
+- Stabilise sorting of values that are space separated lists
+
 ## [v2.4.7] - 2025-11-13
 
 ### Security
