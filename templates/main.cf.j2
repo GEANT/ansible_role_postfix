@@ -6,7 +6,7 @@
 {% if value.0.path is defined %}
 {{ param }} = {{ value.0.path }}
 {% else %}
-{{ param }} = {{ value | join (" ") }}
+{{ param }} = {{ value | sort | join (" ") }}
 {% endif %}
 {% else %}
 {{ param }} = {{ value }}
