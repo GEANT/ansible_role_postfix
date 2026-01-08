@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.4.9] - 2026-01-08
+
+### Fixed
+
+- Forward compatibility issues
+
 ## [v2.4.8] - 2025-11-19
 
 ### Fixed
