@@ -35,9 +35,9 @@ postfix_main_default:
   smtp_use_tls: "yes"
   smtpd_tls_session_cache_database: btree:${data_directory}/smtpd_scache
   smtp_tls_session_cache_database: btree:${data_directory}/smtp_scache
-  myhostname: "{{ ansible_fqdn }}"
+  myhostname: "{{ ansible_facts['fqdn'] }}"
   alias_maps: hash:/etc/aliases
-  myorigin: "{{ ansible_fqdn }}"
+  myorigin: "{{ ansible_facts['fqdn'] }}"
   mailbox_size_limit: "0"
   recipient_delimiter: +
   mynetworks:
