@@ -63,28 +63,33 @@
 
   # Note: if the name does NOT start with a '/', then it is considered a path
   # relative to "postfix_config_directory"
-- name: Ensure hash files are available
+- name: Ensure lookup map files are available
   ansible.builtin.copy:
     content: |
       # Ansible managed
       {% for k, v in map.value.items() %}
-      {{ k }}{{ ':' if 'alias' in map.key else '' }} {{ v }}
+      {{ k }}{{ ':' if 'alias' in dest else '' }} {{ v }}
       {% endfor %}
-    dest: "{% if map.key.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ map.key }}"
+    dest: "{% if dest.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ dest }}"
     owner: root
     group: root
-    mode: "{{ '0400' if 'passw' in map.key else '0664' }}"
+    mode: "{{ '0400' if 'passw' in dest else '0644' }}"
   loop: "{{ postfix_maps | dict2items }}"
   loop_control:
     loop_var: map
-    label: "{% if map.key.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ map.key }}"
-  register: hashes
+    label: "{% if dest.0 != '/' %}{{ postfix_config_directory }}/{% endif %}{{ dest }}"
+  vars:
+    needs_postmap: "{{ map.key is not match('(pcre|regexp|cidr|texthash):') }}"
+    dest: "{{ map.key | regex_replace('^([a-z]+:)', '') }}"
+  register: _maps
+  notify: Restart postfix
 
 - name: Ensure corresponding Berkely DB files are created/updated  # noqa no-changed-when
-  ansible.builtin.command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.dest }}
-  loop: "{{ hashes.results | json_query('[?changed]') }}"
+  ansible.builtin.command: post{{ ('alias' in item.dest) | ternary('alias', 'map') }} {{ item.dest | quote }}
+  loop: "{{ _maps.results | json_query('[?changed]') }}"
   loop_control:
     label: "{{ item.dest }}.db"
+  when: item.map.key is not match('(pcre|regexp|cidr|texthash):')
   notify: Restart postfix
 
 - name: Include relay server tasks

@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+auth_mechanisms = plain login
+passdb passwd-file {
+  default_password_scheme = ARGON2ID
+  passwd_file_path = {{ postfix_relay_password_file | quote }}
+}
