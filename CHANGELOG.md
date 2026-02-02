@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [v2.4.10] - 2026-02-02
+
+### Fixed
+
+- Make the role compatible with dovecot-2.4, which is shipped with Debian 13
+- Do not create `.db` for map types that do not need that (`pcre`, `cidr`, etc)
+- Fix deprecated parameters
+- Do not make map files group writable
+
 ## [v2.4.9] - 2026-01-08
 
 ### Fixed
