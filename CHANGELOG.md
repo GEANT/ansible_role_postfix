@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [v2.4.11] - 2026-10-02
+
+### Changed
+
+- Update CI repo path after renaming operation.
+
 ## [v2.4.10] - 2026-02-02
 
 ### Fixed
