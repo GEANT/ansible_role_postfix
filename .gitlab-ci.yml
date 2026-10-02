@@ -1,5 +1,5 @@
 ---
 include:
-  - project: "eduteams/ci-auto-versioning"
+  - project: "coreaai/ci-auto-versioning"
     ref: ng
     file: "profiles/role.yml"
